@@ -16187,8 +16187,9 @@ GameObject:
   - component: {fileID: 8728627191915173140}
   - component: {fileID: 703666660839743238}
   - component: {fileID: 6754811208188455762}
-  - component: {fileID: -2279221693117634798}
   - component: {fileID: 1501204621082602177}
+  - component: {fileID: -2279221693117634798}
+  - component: {fileID: 1252490267774682531}
   - component: {fileID: -9188181079970537363}
   - component: {fileID: 8342889861831960180}
   - component: {fileID: 670753943882634761}
@@ -16234,7 +16235,11 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Eyebrows'\n\tTransform 'Head_Attachment'\n\tTransform
+    'Eyes'\n\tTransform 'Eyebrows'\n\tTransform 'Head_Attachment'\n\tTransform 'Eyes'\n\tFrom
+    animation clip 'core_main_idle_01'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -16259,27 +16264,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-2279221693117634798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2205407631169410530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05b1ea91308f95c4099bdfc1eb751796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterController: {fileID: 0}
-  animator: {fileID: 0}
-  characterNetworkManager: {fileID: 0}
-  isPerformingAction: 0
-  applyRootMotion: 0
-  canRotate: 1
-  canMove: 1
-  playerAnimatorManager: {fileID: 0}
-  playerLocomotionManager: {fileID: 0}
 --- !u!114 &1501204621082602177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16305,6 +16289,49 @@ MonoBehaviour:
     m_InternalValue: 0
   moveAmount:
     m_InternalValue: 0
+  isSprinting:
+    m_InternalValue: 0
+  endurance:
+    m_InternalValue: 10
+  currentStamina:
+    m_InternalValue: 0
+  maxStamina:
+    m_InternalValue: 0
+--- !u!114 &-2279221693117634798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2205407631169410530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b1ea91308f95c4099bdfc1eb751796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterController: {fileID: 0}
+  animator: {fileID: 0}
+  characterNetworkManager: {fileID: 0}
+  isPerformingAction: 0
+  applyRootMotion: 0
+  canRotate: 1
+  canMove: 1
+  playerAnimatorManager: {fileID: 0}
+  playerLocomotionManager: {fileID: 0}
+  playerNetworkManager: {fileID: 0}
+  playerStatsManager: {fileID: 0}
+--- !u!114 &1252490267774682531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2205407631169410530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8b99d5848a9f646876c4dff3cfbad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-9188181079970537363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16322,6 +16349,7 @@ MonoBehaviour:
   moveAmount: 0
   walkingSpeed: 1.5
   runningSpeed: 4.3
+  sprintingSpeed: 7
   rotationSpeed: 15
 --- !u!114 &8342889861831960180
 MonoBehaviour:

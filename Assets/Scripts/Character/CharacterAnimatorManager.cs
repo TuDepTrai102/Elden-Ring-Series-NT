@@ -9,19 +9,30 @@ namespace EldenRing.NT
     {
         CharacterManager character;
 
-        float vertical;
-        float horizontal;
+        int vertical;
+        int horizontal;
 
         protected virtual void Awake()
         {
             character = GetComponent<CharacterManager>();
+
+            vertical = Animator.StringToHash("Vertical");
+            horizontal = Animator.StringToHash("Horizontal");
         }
 
-        public void UpdateAnimatorMovementParameters(float horizontalMovement, float verticalMovement)
+        public void UpdateAnimatorMovementParameters(float horizontalMovement, float verticalMovement, bool isSprinting)
         {
+            float horizontalAmount = horizontalMovement;
+            float verticalAmount = verticalMovement;
+
+            if (isSprinting)
+            {
+                verticalAmount = 2;
+            }
+
             //  OPTION 1
-            character.animator.SetFloat("Horizontal", horizontalMovement, 0.1f, Time.deltaTime);
-            character.animator.SetFloat("Vertical", verticalMovement, 0.1f, Time.deltaTime);
+            character.animator.SetFloat(horizontal, horizontalAmount, 0.1f, Time.deltaTime);
+            character.animator.SetFloat(vertical, verticalAmount, 0.1f, Time.deltaTime);
 
             //  OPTION 2
             #region OPTION 2

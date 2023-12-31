@@ -26,6 +26,18 @@ namespace EldenRing.NT
         public NetworkVariable<float> moveAmount = new NetworkVariable<float>
             (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        [Header("FLAGS")]
+        public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        [Header("STATS")]
+        public NetworkVariable<int> endurance = new NetworkVariable<int>
+            (1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> currentStamina = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> maxStamina = new NetworkVariable<int>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         protected virtual void Awake()
         {
             character = GetComponent<CharacterManager>();

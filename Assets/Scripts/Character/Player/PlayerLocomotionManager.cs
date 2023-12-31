@@ -17,10 +17,13 @@ namespace EldenRing.NT
         private Vector3 targetRotationDirection;
         [SerializeField] float walkingSpeed = 2;
         [SerializeField] float runningSpeed = 5;
+        [SerializeField] float sprintingSpeed = 7;
         [SerializeField] float rotationSpeed = 15;
+        [SerializeField] int sprintingStaminaCost = 2;
 
         [Header("DODGE")]
         private Vector3 rollDirection;
+        [SerializeField] float dodgeStaminaCost = 25;
 
         protected override void Awake()
         {
@@ -46,7 +49,7 @@ namespace EldenRing.NT
                 moveAmount = player.characterNetworkManager.moveAmount.Value;
 
                 //  IF NOT LOCKED ON, PASS MOVE AMOUNT
-                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
                 //  IF LOCKED ON, PASS HORIZONTAL AND VERTICAL
             }
@@ -79,13 +82,20 @@ namespace EldenRing.NT
             moveDirection.Normalize();
             moveDirection.y = 0;
 
-            if (PlayerInputManager.instance.moveAmount > 0.5f)
+            if (player.playerNetworkManager.isSprinting.Value)
             {
-                player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+                player.characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
             }
-            else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+            else
             {
-                player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
+                if (PlayerInputManager.instance.moveAmount > 0.5f)
+                {
+                    player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+                }
+                else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+                {
+                    player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
+                }
             }
         }
 
@@ -110,9 +120,42 @@ namespace EldenRing.NT
             transform.rotation = targetRotation;
         }
 
+        public void HandleSprinting()
+        {
+            if (player.isPerformingAction)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.currentStamina.Value <= sprintingStaminaCost)   // OR <= 0
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
+            }
+
+            //  IF WE ARE MOVING, SPRINTING IS TRUE
+            if (moveAmount >= 0.5f)
+            {
+                player.playerNetworkManager.isSprinting.Value = true;
+            }
+            //  IF WE ARE STATIONARY/MOVING SLOWLY SPRINTING IS FALSE
+            else
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            }
+        }
+
         public void AttemptToPerformDodge()
         {
             if (player.isPerformingAction)
+                return;
+
+            if (player.playerNetworkManager.currentStamina.Value <= dodgeStaminaCost)   //  OR <= 0 IT'S DOESN'T MATTER
                 return;
 
             //  IF WE ARE MOVING WHEN WE ATTEMP TO DODGE, WE PERFORM A ROLL
@@ -135,6 +178,8 @@ namespace EldenRing.NT
                 //  PERFORM A BACKSTEP ANIMATION
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
             }
+
+            player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
     }
 }
